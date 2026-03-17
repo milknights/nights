@@ -1,168 +1,273 @@
 <!DOCTYPE html>
 <html lang="zh-CN">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>我的个人博客</title>
-    <style>
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-            font-family: Arial, sans-serif;
-        }
-
-        body {
-            background-color: #f5f5f5;
-            max-width: 1000px;
-            margin: 0 auto;
-            padding: 20px;
-        }
-
-        header {
-            text-align: center;
-            margin-bottom: 30px;
-        }
-
-        .upload-area {
-            background: white;
-            padding: 25px;
-            border-radius: 10px;
-            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
-            margin-bottom: 30px;
-        }
-
-        input, textarea {
-            width: 100%;
-            padding: 10px;
-            margin: 8px 0;
-            border: 1px solid #ddd;
-            border-radius: 5px;
-        }
-
-        button {
-            background: #4285f4;
-            color: white;
-            border: none;
-            padding: 10px 20px;
-            border-radius: 5px;
-            cursor: pointer;
-        }
-
-        button:hover {
-            background: #3367d6;
-        }
-
-        .blog-list {
-            display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
-            gap: 20px;
-        }
-
-        .blog-card {
-            background: white;
-            border-radius: 10px;
-            overflow: hidden;
-            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
-            transition: 0.3s;
-        }
-
-        .blog-card:hover {
-            transform: translateY(-5px);
-        }
-
-        .blog-card img {
-            width: 100%;
-            height: 200px;
-            object-fit: cover;
-            cursor: pointer;
-        }
-
-        .blog-info {
-            padding: 15px;
-        }
-
-        .blog-title {
-            font-size: 18px;
-            margin-bottom: 8px;
-        }
-    </style>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>个人博客管理系统</title>
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+      font-family: "Microsoft Yahei", sans-serif;
+    }
+    body {
+      background: #f7f8fa;
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 20px;
+    }
+    header {
+      text-align: center;
+      margin: 30px 0;
+    }
+    .publish-box {
+      background: #fff;
+      padding: 25px;
+      border-radius: 12px;
+      box-shadow: 0 2px 12px rgba(0, 0, 0, 0.08);
+      margin-bottom: 30px;
+    }
+    .form-item {
+      margin-bottom: 15px;
+    }
+    label {
+      display: block;
+      margin-bottom: 6px;
+      font-weight: bold;
+      color: #333;
+    }
+    input, textarea {
+      width: 100%;
+      padding: 10px 12px;
+      border: 1px solid #ddd;
+      border-radius: 6px;
+      font-size: 14px;
+    }
+    textarea {
+      resize: vertical;
+      min-height: 100px;
+    }
+    button {
+      padding: 10px 20px;
+      border: none;
+      border-radius: 6px;
+      cursor: pointer;
+      font-size: 14px;
+      margin-right: 10px;
+    }
+    .btn-publish {
+      background: #409eff;
+      color: #fff;
+    }
+    .btn-publish:hover {
+      background: #3385e5;
+    }
+    .btn-cancel {
+      background: #909399;
+      color: #fff;
+      display: none;
+    }
+    .blog-list {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+      gap: 20px;
+    }
+    .blog-card {
+      background: #fff;
+      border-radius: 12px;
+      overflow: hidden;
+      box-shadow: 0 2px 10px rgba(0, 0, 0, 0.08);
+      transition: 0.3s;
+    }
+    .blog-card:hover {
+      transform: translateY(-4px);
+    }
+    .blog-img {
+      width: 100%;
+      height: 180px;
+      object-fit: cover;
+      cursor: pointer;
+    }
+    .blog-info {
+      padding: 15px;
+    }
+    .blog-title {
+      font-size: 16px;
+      font-weight: bold;
+      margin-bottom: 8px;
+      cursor: pointer;
+      color: #333;
+    }
+    .blog-desc {
+      font-size: 13px;
+      color: #666;
+      margin-bottom: 10px;
+      line-height: 1.5;
+    }
+    .opt-btn {
+      font-size: 12px;
+      padding: 4px 8px;
+      border-radius: 4px;
+      margin-right: 6px;
+    }
+    .btn-edit {
+      background: #67c23a;
+      color: #fff;
+    }
+    .btn-del {
+      background: #f56c6c;
+      color: #fff;
+    }
+  </style>
 </head>
 <body>
-    <header>
-        <h1>我的个人博客</h1>
-        <p>上传图片 + 文字，点击图片查看详情</p>
-    </header>
+  <header>
+    <h1>个人博客管理系统</h1>
+    <p>支持发布、编辑、删除、详情跳转</p>
+  </header>
 
-    <!-- 上传区域 -->
-    <div class="upload-area">
-        <h3>发布新博客</h3>
-        <input type="text" id="title" placeholder="请输入标题">
-        <textarea id="content" rows="3" placeholder="请输入文字内容"></textarea>
-        <input type="file" id="imageUpload" accept="image/*">
-        <button onclick="publishBlog()">发布博客</button>
+  <!-- 发布/编辑表单 -->
+  <div class="publish-box">
+    <h3 id="formTitle">发布新文章</h3>
+    <div class="form-item">
+      <label>文章标题</label>
+      <input type="text" id="title" placeholder="请输入标题" />
     </div>
+    <div class="form-item">
+      <label>文章正文</label>
+      <textarea id="content" placeholder="请输入正文内容"></textarea>
+    </div>
+    <div class="form-item">
+      <label>上传图片</label>
+      <input type="file" id="imageUpload" accept="image/*" />
+    </div>
+    <button class="btn-publish" id="publishBtn" onclick="publishOrEdit()">确认发布</button>
+    <button class="btn-cancel" id="cancelBtn" onclick="cancelEdit()">取消编辑</button>
+  </div>
 
-    <!-- 博客列表 -->
-    <div class="blog-list" id="blogList"></div>
+  <!-- 博客列表 -->
+  <div class="blog-list" id="blogList"></div>
 
-    <script>
-        // 本地存储博客数据
-        let blogs = JSON.parse(localStorage.getItem('blogs')) || [];
+  <script>
+    // 文章数据 & 编辑标记
+    let blogs = JSON.parse(localStorage.getItem("blogs")) || [];
+    let editId = null;
 
-        // 渲染博客
-        function renderBlogs() {
-            const list = document.getElementById('blogList');
-            list.innerHTML = '';
+    // 渲染列表
+    function renderList() {
+      const listEl = document.getElementById("blogList");
+      listEl.innerHTML = "";
+      blogs.forEach((item, index) => {
+        const card = document.createElement("div");
+        card.className = "blog-card";
+        card.innerHTML = `
+          <img src="${item.image}" class="blog-img" onclick="goDetail(${index})">
+          <div class="blog-info">
+            <div class="blog-title" onclick="goDetail(${index})">${item.title}</div>
+            <div class="blog-desc">${item.content.substr(0, 50)}...</div>
+            <button class="opt-btn btn-edit" onclick="editBlog(${index})">编辑</button>
+            <button class="opt-btn btn-del" onclick="delBlog(${index})">删除</button>
+          </div>
+        `;
+        listEl.appendChild(card);
+      });
+    }
 
-            blogs.forEach((blog, index) => {
-                const card = document.createElement('div');
-                card.className = 'blog-card';
-                card.innerHTML = `
-                    <a href="detail.html?id=${index}">
-                        <img src="${blog.image}" alt="博客图片">
-                    </a>
-                    <div class="blog-info">
-                        <h3 class="blog-title">${blog.title}</h3>
-                        <p>${blog.content.substring(0, 50)}...</p>
-                    </div>
-                `;
-                list.appendChild(card);
-            });
+    // 跳转详情
+    function goDetail(id) {
+      location.href = `detail.html?id=${id}`;
+    }
+
+    // 发布或更新
+    function publishOrEdit() {
+      const title = document.getElementById("title").value.trim();
+      const content = document.getElementById("content").value.trim();
+      const file = document.getElementById("imageUpload").files[0];
+
+      if (!title || !content) {
+        alert("标题和正文不能为空！");
+        return;
+      }
+
+      // 编辑模式：没有新图则沿用旧图
+      if (editId !== null) {
+        blogs[editId].title = title;
+        blogs[editId].content = content;
+        if (file) {
+          const reader = new FileReader();
+          reader.onload = (e) => {
+            blogs[editId].image = e.target.result;
+            saveAndReset();
+          };
+          reader.readAsDataURL(file);
+        } else {
+          saveAndReset();
         }
+        return;
+      }
 
-        // 发布博客
-        function publishBlog() {
-            const title = document.getElementById('title').value;
-            const content = document.getElementById('content').value;
-            const file = document.getElementById('imageUpload').files[0];
+      // 新增模式：必须上传图片
+      if (!file) {
+        alert("请上传图片！");
+        return;
+      }
 
-            if (!title || !content || !file) {
-                alert('请填写完整信息并选择图片！');
-                return;
-            }
+      const reader = new FileReader();
+      reader.onload = (e) => {
+        blogs.unshift({
+          title: title,
+          content: content,
+          image: e.target.result,
+        });
+        saveAndReset();
+      };
+      reader.readAsDataURL(file);
+    }
 
-            const reader = new FileReader();
-            reader.onload = function (e) {
-                const blog = {
-                    title,
-                    content,
-                    image: e.target.result
-                };
-                blogs.unshift(blog);
-                localStorage.setItem('blogs', JSON.stringify(blogs));
-                alert('发布成功！');
-                renderBlogs();
-                // 清空表单
-                document.getElementById('title').value = '';
-                document.getElementById('content').value = '';
-                document.getElementById('imageUpload').value = '';
-            };
-            reader.readAsDataURL(file);
-        }
+    // 保存并重置表单
+    function saveAndReset() {
+      localStorage.setItem("blogs", JSON.stringify(blogs));
+      document.getElementById("title").value = "";
+      document.getElementById("content").value = "";
+      document.getElementById("imageUpload").value = "";
+      document.getElementById("formTitle").innerText = "发布新文章";
+      document.getElementById("cancelBtn").style.display = "none";
+      editId = null;
+      renderList();
+      alert("操作成功！");
+    }
 
-        // 初始化页面
-        renderBlogs();
-    </script>
+    // 编辑赋值
+    function editBlog(id) {
+      editId = id;
+      const item = blogs[id];
+      document.getElementById("title").value = item.title;
+      document.getElementById("content").value = item.content;
+      document.getElementById("formTitle").innerText = "编辑文章";
+      document.getElementById("cancelBtn").style.display = "inline-block";
+    }
+
+    // 取消编辑
+    function cancelEdit() {
+      editId = null;
+      document.getElementById("title").value = "";
+      document.getElementById("content").value = "";
+      document.getElementById("imageUpload").value = "";
+      document.getElementById("formTitle").innerText = "发布新文章";
+      document.getElementById("cancelBtn").style.display = "none";
+    }
+
+    // 删除
+    function delBlog(id) {
+      if (!confirm("确定删除该文章？")) return;
+      blogs.splice(id, 1);
+      localStorage.setItem("blogs", JSON.stringify(blogs));
+      renderList();
+    }
+
+    // 初始化
+    renderList();
+  </script>
 </body>
 </html>
