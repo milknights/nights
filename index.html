@@ -81,16 +81,37 @@
     }
 
     .blog-preview {
-      width: 50%; background: #fff; border-radius: 16px; padding: 25px;
+      width: 50%;
+      background: #fff;
+      border-radius: 16px;
+      padding: 25px;
       box-shadow: 0 3px 12px rgba(102, 113, 255, 0.07);
-      min-height: 400px; display: flex; align-items: center; justify-content: center;
+      min-height: 400px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      background: linear-gradient(135deg, #f0f4ff 0%, #f8f9ff 100%);
+      border: 1px dashed #cbd5e0;
     }
     .blog-preview.empty { display: none; }
 
     .preview-img-box {
-      width: 66.6%; aspect-ratio: 1/1; overflow: hidden; border-radius: 12px;
+      width: 100%;
+      max-width: 400px;
+      height: 300px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      background: linear-gradient(135deg, #f0f4ff 0%, #f8f9ff 100%);
+      border-radius: 12px;
+      overflow: hidden;
     }
-    .preview-img { width: 100%; height: 100%; object-fit: cover; }
+    .preview-img {
+      max-width: 100%;
+      max-height: 100%;
+      object-fit: contain;
+      border-radius: 8px;
+    }
 
     .blog-thumb-item {
       background: #fff; border-radius: 12px; overflow: hidden;
@@ -98,14 +119,16 @@
       transition: all 0.3s ease; cursor: pointer;
     }
     .blog-thumb-img {
-      width: 66.6%; aspect-ratio: 1/1; object-fit: cover;
-      margin: 15px auto; border-radius: 8px; display: block;
+      width: 100%;
+      aspect-ratio: 1/1;
+      object-fit: cover;
+      border-radius: 8px;
     }
     .blog-thumb-item:hover {
       transform: translateY(-3px); box-shadow: 0 6px 15px rgba(102, 113, 255, 0.1);
     }
     .blog-thumb-title {
-      padding: 0 15px 15px; font-size: 16px; font-weight: 600;
+      padding: 15px; font-size: 16px; font-weight: 600;
       color: #2d3748; text-align: center; line-height: 1.4;
     }
 
@@ -155,7 +178,7 @@
     #colorPicker { width: 40px; height: 32px; border: none; cursor: pointer; }
 
     .form-row { display: flex; flex-direction: column; gap: 15px; margin-bottom: 15px; }
-    .form-item { display: flex; flex-direction: column; gap: 6px; }
+    .form-item { display: flex; flex-direction: column; gap: 6px; min-width: 250px; }
     .form-item label { font-size: 14px; font-weight: 500; color: #4a5568; }
 
     input, textarea {
@@ -169,23 +192,52 @@
       border-radius: 8px; outline: none; line-height: 1.6;
     }
 
-    .img-upload-group { display: flex; gap: 25px; flex-wrap: wrap; margin: 10px 0; }
-    .crop-wrapper {
-      position: relative; width: 220px; height: 220px;
-      border: 2px solid #e2e8f0; border-radius: 12px;
-      background: #f8f9ff; overflow: hidden;
+    /* 图片上传区域同行显示 */
+    .img-upload-group {
+      display: flex;
+      flex-direction: row;
+      gap: 30px;
+      align-items: flex-start;
+      flex-wrap: nowrap;
+      margin-top: 10px;
     }
+
+    /* 封面图：固定正方形 */
+    .crop-wrapper-cover {
+      position: relative;
+      width: 220px;
+      height: 220px;
+      border: 2px solid #e2e8f0;
+      border-radius: 12px;
+      background: #f8f9ff;
+      overflow: hidden;
+    }
+
+    /* 正文图：任意比例，可调节大小 */
+    .crop-wrapper-content {
+      position: relative;
+      width: 320px;
+      height: 220px;
+      border: 2px solid #e2e8f0;
+      border-radius: 12px;
+      background: #f8f9ff;
+      overflow: hidden;
+      resize: both;
+    }
+
     .crop-img {
-      position: absolute; left: 0; top: 0;
+      position: absolute;
+      left: 0; top: 0;
       transform-origin: center center;
-      cursor: move; max-width: none;
+      cursor: move;
+      max-width: none;
     }
     .crop-frame {
       position: absolute; left: 10px; top: 10px;
-      width: 200px; height: 200px;
+      width: calc(100% - 20px); height: calc(100% - 20px);
       border: 2px solid #6671ff;
       border-radius: 8px;
-      box-shadow: 0 0 0 1000px rgba(0,0,0,0.2);
+      box-shadow: 0 0 0 1000px rgba(0,0,0,0.15);
       pointer-events: none;
     }
     .crop-controls {
@@ -222,8 +274,7 @@
       .home-layout { flex-direction: column; }
       .blog-list-sidebar, .blog-preview { width: 100%; }
       .blog-list-sidebar { grid-template-columns: 1fr; }
-      .blog-top { padding: 20px; }
-      .publish-inner { padding: 0 20px; }
+      .img-upload-group { flex-direction: column; gap: 20px; }
     }
   </style>
 </head>
@@ -262,34 +313,38 @@
             <input type="text" id="articleTitle" placeholder="请输入文章标题">
           </div>
 
-          <div class="form-item">
-            <label>上传封面图（首页展示）</label>
-            <div class="crop-wrapper" id="coverCropWrap">
-              <img class="crop-img" id="coverCropImg" style="display:none">
-              <div class="crop-frame"></div>
+          <div class="img-upload-group">
+            <!-- 封面图：正方形 -->
+            <div class="form-item">
+              <label>上传封面图（正方形）</label>
+              <div class="crop-wrapper-cover" id="coverCropWrap">
+                <img class="crop-img" id="coverCropImg" style="display:none">
+                <div class="crop-frame"></div>
+              </div>
+              <div class="crop-controls">
+                <button class="crop-btn" onclick="zoomImg('cover', 1.1)">放大 +</button>
+                <button class="crop-btn" onclick="zoomImg('cover', 0.9)">缩小 -</button>
+                <button class="crop-btn" onclick="smartCrop('cover')">智能裁剪</button>
+              </div>
+              <p class="crop-tip">拖动定位 + 滚轮缩放</p>
+              <input type="file" id="coverUpload" class="file-upload" accept="image/*" onchange="loadCropImage(event, 'cover')">
             </div>
-            <div class="crop-controls">
-              <button class="crop-btn" onclick="zoomImg('cover', 1.1)">放大 +</button>
-              <button class="crop-btn" onclick="zoomImg('cover', 0.9)">缩小 -</button>
-              <button class="crop-btn" onclick="smartCrop('cover')">智能裁剪</button>
-            </div>
-            <p class="crop-tip">拖动图片定位 + 滚轮缩放 / 按钮缩放</p>
-            <input type="file" id="coverUpload" class="file-upload" accept="image/*" onchange="loadCropImage(event, 'cover')">
-          </div>
 
-          <div class="form-item">
-            <label>上传正文图（详情页展示）</label>
-            <div class="crop-wrapper" id="contentCropWrap">
-              <img class="crop-img" id="contentCropImg" style="display:none">
-              <div class="crop-frame"></div>
+            <!-- 正文图：任意比例可调节 -->
+            <div class="form-item">
+              <label>上传正文图（任意比例可调节）</label>
+              <div class="crop-wrapper-content" id="contentCropWrap">
+                <img class="crop-img" id="contentCropImg" style="display:none">
+                <div class="crop-frame"></div>
+              </div>
+              <div class="crop-controls">
+                <button class="crop-btn" onclick="zoomImg('content', 1.1)">放大 +</button>
+                <button class="crop-btn" onclick="zoomImg('content', 0.9)">缩小 -</button>
+                <button class="crop-btn" onclick="smartCrop('content')">智能裁剪</button>
+              </div>
+              <p class="crop-tip">拖动定位 + 滚轮缩放 + 右下角调节大小</p>
+              <input type="file" id="contentUpload" class="file-upload" accept="image/*" onchange="loadCropImage(event, 'content')">
             </div>
-            <div class="crop-controls">
-              <button class="crop-btn" onclick="zoomImg('content', 1.1)">放大 +</button>
-              <button class="crop-btn" onclick="zoomImg('content', 0.9)">缩小 -</button>
-              <button class="crop-btn" onclick="smartCrop('content')">智能裁剪</button>
-            </div>
-            <p class="crop-tip">拖动图片定位 + 滚轮缩放 / 按钮缩放</p>
-            <input type="file" id="contentUpload" class="file-upload" accept="image/*" onchange="loadCropImage(event, 'content')">
           </div>
 
           <div class="form-item">
@@ -380,7 +435,7 @@
       r.readAsDataURL(f);
     }
 
-    // ========== 图片裁剪核心（已修复所有bug）==========
+    // ========== 图片裁剪核心 ==========
     function loadCropImage(e, type) {
       const file = e.target.files[0];
       if (!file) return;
@@ -528,21 +583,25 @@
       icon.classList.add('rotate');
     }
 
-    // ========== ✅ 发布保存（已完全修复）==========
+    // ========== ✅ 发布功能已修复 ==========
     function saveArticle() {
       const title = document.getElementById('articleTitle').value.trim();
-      const content = document.getElementById('articleEditor').innerHTML;
+      const content = document.getElementById('articleEditor').innerHTML.trim();
       const coverImg = document.getElementById('coverCropImg');
       const contentImg = document.getElementById('contentCropImg');
 
-      const coverSrc = coverImg.style.display !== 'none' ? coverImg.src : '';
-      const contentSrc = contentImg.style.display !== 'none' ? contentImg.src : '';
+      const coverSrc = coverImg.src || '';
+      const contentSrc = contentImg.src || '';
 
-      if (!title || !content) {
-        alert('标题和内容不能为空！');
+      if (!title) {
+        alert('请输入文章标题！');
         return;
       }
-      if (!coverSrc) {
+      if (!content) {
+        alert('请输入文章内容！');
+        return;
+      }
+      if (!coverSrc || coverSrc === '') {
         alert('请上传封面图！');
         return;
       }
@@ -551,14 +610,14 @@
         title, content, cover: coverSrc, contentImg: contentSrc
       };
 
-      if (editArticleId !== null) {
+      if (editArticleId != null) {
         articleList[editArticleId] = data;
       } else {
         articleList.unshift(data);
       }
 
       localStorage.setItem('articleList', JSON.stringify(articleList));
-      alert(editArticleId ? '文章编辑成功！' : '文章发布成功！');
+      alert(editArticleId != null ? '编辑成功！' : '发布成功！');
       resetForm();
       currentPage = 1;
       renderPage();
