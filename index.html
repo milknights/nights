@@ -362,39 +362,44 @@
       line-height: 1.6;
     }
 
-    /* 图片上传区域：封面图+正文图，新增裁切预览框 */
+    /* 图片上传区域：封面图+正文图，主流缩放裁切 */
     .img-upload-group {
       display: flex;
       gap: 25px;
       flex-wrap: wrap;
     }
 
-    /* 图片裁切预览容器，支持拖动调整裁切区域 */
-    .img-crop-box {
+    /* 主流图片裁切容器 - 仿社交平台/修图工具样式 */
+    .crop-container {
       position: relative;
-      width: 180px;
-      height: 180px;
-      border: 2px dashed #cbd5e0;
+      width: 200px;
+      height: 200px;
+      border: 2px solid #e2e8f0;
       border-radius: 12px;
       overflow: hidden;
       margin: 10px 0;
       background: #f8f9ff;
-    }
-
-    .crop-img {
-      position: absolute;
-      max-width: none;
       cursor: move;
     }
 
-    .file-upload {
-      font-size: 13px;
+    /* 裁切框内图片样式，支持缩放拖动 */
+    .crop-target-img {
+      position: absolute;
+      max-width: none;
+      transform-origin: center center;
+      user-select: none;
     }
 
+    /* 裁切操作提示 */
     .crop-tip {
       font-size: 12px;
       color: #718096;
       margin-top: 5px;
+      line-height: 1.4;
+    }
+
+    .file-upload {
+      font-size: 13px;
     }
 
     .publish-btn-group {
@@ -501,23 +506,23 @@
             <label>文章标题</label>
             <input type="text" id="articleTitle" placeholder="请输入文章标题">
           </div>
-          <!-- 双图片上传：封面图（首页展示）+正文图（详情页展示），支持裁切调整 -->
+          <!-- 双图片上传：封面图+正文图，主流缩放裁切 -->
           <div class="img-upload-group">
             <div class="form-item">
-              <label>上传封面图（首页展示，可拖动裁切）</label>
-              <div class="img-crop-box" id="coverCropBox">
-                <img class="crop-img" id="coverCropImg" style="display: none;">
+              <label>上传封面图（首页展示）</label>
+              <div class="crop-container" id="coverCropWrap">
+                <img class="crop-target-img" id="coverCropImg" style="display: none;">
               </div>
-              <p class="crop-tip">上传后拖动图片调整裁切位置</p>
-              <input type="file" id="coverUpload" class="file-upload" accept="image/*" onchange="initCoverCrop(event)">
+              <p class="crop-tip">💡 操作：鼠标拖动定位，滚轮放大缩小，固定比例裁切</p>
+              <input type="file" id="coverUpload" class="file-upload" accept="image/*" onchange="initNormalCrop(event, 'cover')">
             </div>
             <div class="form-item">
-              <label>上传正文图（仅详情页展示，可拖动裁切）</label>
-              <div class="img-crop-box" id="contentCropBox">
-                <img class="crop-img" id="contentCropImg" style="display: none;">
+              <label>上传正文图（仅详情页展示）</label>
+              <div class="crop-container" id="contentCropWrap">
+                
               </div>
-              <p class="crop-tip">上传后拖动图片调整裁切位置</p>
-              <input type="file" id="contentUpload" class="file-upload" accept="image/*" onchange="initContentCrop(event)">
+              <p class="crop-tip">💡 操作：鼠标拖动定位，滚轮放大缩小，固定比例裁切</p>
+              <input type="file" id="contentUpload" class="file-upload" accept="image/*" onchange="initNormalCrop(event, 'content')">
             </div>
           </div>
           <!-- 富文本编辑工具栏 -->
@@ -545,9 +550,11 @@
     const PAGE_SIZE = 6;
     let currentPage = 1;
     let editArticleId = null;
-    // 图片裁切拖动变量
-    let isDraggingCover = false, isDraggingContent = false;
-    let coverStartX = 0, coverStartY = 0, contentStartX = 0, contentStartY = 0;
+    // 主流裁切全局变量
+    let coverScale = 1, contentScale = 1;
+    let coverOffsetX = 0, coverOffsetY = 0;
+    let contentOffsetX = 0, contentOffsetY = 0;
+    let isDragging = false, startX = 0, startY = 0, currentCropTarget = '';
 
     // 加载本地数据
     let blogConfig = JSON.parse(localStorage.getItem('blogConfig')) || {
@@ -627,91 +634,114 @@
       reader.readAsDataURL(file);
     }
 
-    // 初始化封面图裁切与拖动
-    function initCoverCrop(e) {
+    // ==================== 主流图片裁切核心逻辑（替换原有粗糙逻辑）====================
+    /**
+     * 初始化标准裁切：支持拖动定位+滚轮缩放，原生无插件，流畅易用
+     * type: cover/content 区分封面图和正文图
+     */
+    function initNormalCrop(e, type) {
       const file = e.target.files[0];
       if (!file) return;
+      const imgId = type === 'cover' ? 'coverCropImg' : 'contentCropImg';
+      const wrapId = type === 'cover' ? 'coverCropWrap' : 'contentCropWrap';
+      const imgEl = document.getElementById(imgId);
+      const wrapEl = document.getElementById(wrapId);
+
       const reader = new FileReader();
       reader.onload = function(res) {
-        const img = document.getElementById('coverCropImg');
-        img.src = res.target.result;
-        img.style.display = 'block';
-        img.style.left = '0px';
-        img.style.top = '0px';
-        bindCoverDrag();
+        // 重置缩放和偏移量
+        if(type === 'cover') {
+          coverScale = 1;
+          coverOffsetX = 0;
+          coverOffsetY = 0;
+        } else {
+          contentScale = 1;
+          contentOffsetX = 0;
+          contentOffsetY = 0;
+        }
+        // 渲染图片并绑定事件
+        imgEl.src = res.target.result;
+        imgEl.style.display = 'block';
+        imgEl.style.transform = `translate(${type === 'cover' ? coverOffsetX : contentOffsetX}px, ${type === 'cover' ? coverOffsetY : contentOffsetY}px) scale(${type === 'cover' ? coverScale : contentScale})`;
+        bindCropEvents(wrapEl, imgEl, type);
       };
       reader.readAsDataURL(file);
     }
 
-    // 绑定封面图拖动事件
-    function bindCoverDrag() {
-      const img = document.getElementById('coverCropImg');
-      const box = document.getElementById('coverCropBox');
-      img.onmousedown = function(e) {
-        isDraggingCover = true;
-        coverStartX = e.clientX - img.offsetLeft;
-        coverStartY = e.clientY - img.offsetTop;
+    // 绑定裁切交互事件：拖动+滚轮缩放
+    function bindCropEvents(wrapEl, imgEl, type) {
+      // 鼠标按下 - 开始拖动
+      wrapEl.onmousedown = function(e) {
+        isDragging = true;
+        currentCropTarget = type;
+        startX = e.clientX;
+        startY = e.clientY;
         e.preventDefault();
       };
+
+      // 鼠标移动 - 实时定位
       document.onmousemove = function(e) {
-        if(!isDraggingCover) return;
-        let left = e.clientX - coverStartX;
-        let top = e.clientY - coverStartY;
-        // 限制拖动范围不超出裁切框
-        if(left > 0) left = 0;
-        if(top > 0) top = 0;
-        if(left < -(img.offsetWidth - box.offsetWidth)) left = -(img.offsetWidth - box.offsetWidth);
-        if(top < -(img.offsetHeight - box.offsetHeight)) top = -(img.offsetHeight - box.offsetHeight);
-        img.style.left = left + 'px';
-        img.style.top = top + 'px';
+        if(!isDragging) return;
+        const dx = e.clientX - startX;
+        const dy = e.clientY - startY;
+        startX = e.clientX;
+        startY = e.clientY;
+
+        // 更新对应图片偏移
+        if(currentCropTarget === 'cover') {
+          coverOffsetX += dx;
+          coverOffsetY += dy;
+          imgEl.style.transform = `translate(${coverOffsetX}px, ${coverOffsetY}px) scale(${coverScale})`;
+        } else {
+          contentOffsetX += dx;
+          contentOffsetY += dy;
+          imgEl.style.transform = `translate(${contentOffsetX}px, ${contentOffsetY}px) scale(${contentScale})`;
+        }
       };
+
+      // 鼠标松开 - 结束拖动
       document.onmouseup = function() {
-        isDraggingCover = false;
+        isDragging = false;
+        currentCropTarget = '';
+      };
+
+      // 滚轮缩放 - 主流放大缩小逻辑
+      wrapEl.onwheel = function(e) {
+        e.preventDefault();
+        const scaleStep = 0.1;
+        let newScale;
+
+        if(type === 'cover') {
+          newScale = e.deltaY < 0 ? coverScale + scaleStep : coverScale - scaleStep;
+          newScale = Math.max(0.5, Math.min(newScale, 3)); // 限制缩放范围0.5-3倍
+          coverScale = newScale;
+          imgEl.style.transform = `translate(${coverOffsetX}px, ${coverOffsetY}px) scale(${coverScale})`;
+        } else {
+          newScale = e.deltaY < 0 ? contentScale + scaleStep : contentScale - scaleStep;
+          newScale = Math.max(0.5, Math.min(newScale, 3));
+          contentScale = newScale;
+          imgEl.style.transform = `translate(${contentOffsetX}px, ${contentOffsetY}px) scale(${contentScale})`;
+        }
       };
     }
 
-    // 初始化正文图裁切与拖动
-    function initContentCrop(e) {
-      const file = e.target.files[0];
-      if (!file) return;
-      const reader = new FileReader();
-      reader.onload = function(res) {
-        const img = document.getElementById('contentCropImg');
-        img.src = res.target.result;
-        img.style.display = 'block';
-        img.style.left = '0px';
-        img.style.top = '0px';
-        bindContentDrag();
-      };
-      reader.readAsDataURL(file);
-    }
+    // 编辑文章时回填裁切状态
+    function fillCropState(type, imgUrl) {
+      const imgId = type === 'cover' ? 'coverCropImg' : 'contentCropImg';
+      const wrapId = type === 'cover' ? 'coverCropWrap' : 'contentCropWrap';
+      const imgEl = document.getElementById(imgId);
+      const wrapEl = document.getElementById(wrapId);
+      imgEl.src = imgUrl;
+      imgEl.style.display = 'block';
 
-    // 绑定正文图拖动事件
-    function bindContentDrag() {
-      const img = document.getElementById('contentCropImg');
-      const box = document.getElementById('contentCropBox');
-      img.onmousedown = function(e) {
-        isDraggingContent = true;
-        contentStartX = e.clientX - img.offsetLeft;
-        contentStartY = e.clientY - img.offsetTop;
-        e.preventDefault();
-      };
-      document.onmousemove = function(e) {
-        if(!isDraggingContent) return;
-        let left = e.clientX - contentStartX;
-        let top = e.clientY - contentStartY;
-        // 限制拖动范围不超出裁切框
-        if(left > 0) left = 0;
-        if(top > 0) top = 0;
-        if(left < -(img.offsetWidth - box.offsetWidth)) left = -(img.offsetWidth - box.offsetWidth);
-        if(top < -(img.offsetHeight - box.offsetHeight)) top = -(img.offsetHeight - box.offsetHeight);
-        img.style.left = left + 'px';
-        img.style.top = top + 'px';
-      };
-      document.onmouseup = function() {
-        isDraggingContent = false;
-      };
+      if(type === 'cover') {
+        imgEl.style.transform = `translate(${coverOffsetX}px, ${coverOffsetY}px) scale(${coverScale})`;
+      } else {
+        imgEl.style.transform = `translate(${contentOffsetX}px, ${contentOffsetY}px) scale(${contentScale})`;
+      }
+      bindCropEvents(wrapEl, imgEl, type);
     }
+    // ==================================================================================
 
     // 渲染首页列表+预览，空数据时隐藏右侧预览区
     function renderPage() {
@@ -794,20 +824,10 @@
       const item = articleList[id];
       document.getElementById('articleTitle').value = item.title;
       document.getElementById('articleEditor').innerHTML = item.content;
-      // 封面图裁切预览回填
-      const coverImg = document.getElementById('coverCropImg');
-      coverImg.src = item.cover;
-      coverImg.style.display = 'block';
-      bindCoverDrag();
-      // 正文图裁切预览回填
-      const contentImg = document.getElementById('contentCropImg');
-      if(item.contentImg) {
-        contentImg.src = item.contentImg;
-        contentImg.style.display = 'block';
-        bindContentDrag();
-      } else {
-        contentImg.style.display = 'none';
-      }
+      // 封面图裁切状态回填
+      if(item.cover) fillCropState('cover', item.cover);
+      // 正文图裁切状态回填
+      if(item.contentImg) fillCropState('content', item.contentImg);
       document.getElementById('formTitle').innerText = '编辑文章';
       // 自动展开编辑面板
       const panel = document.getElementById('publishPanel');
@@ -833,7 +853,7 @@
         return;
       }
 
-      // 生成最终图片数据（保留裁切位置）
+      // 生成最终文章数据，保留裁切后的展示效果
       const articleData = {
         title: title,
         content: content,
@@ -858,14 +878,18 @@
     // 重置表单并折叠面板
     function resetForm() {
       editArticleId = null;
+      // 重置表单内容
       document.getElementById('articleTitle').value = '';
       document.getElementById('articleEditor').innerHTML = '';
       document.getElementById('coverUpload').value = '';
       document.getElementById('contentUpload').value = '';
+      // 重置图片裁切状态
       document.getElementById('coverCropImg').style.display = 'none';
       document.getElementById('contentCropImg').style.display = 'none';
+      coverScale = contentScale = 1;
+      coverOffsetX = coverOffsetY = contentOffsetX = contentOffsetY = 0;
+      // 重置标题和面板状态
       document.getElementById('formTitle').innerText = '发布新文章';
-      // 自动折叠面板
       const panel = document.getElementById('publishPanel');
       const icon = document.getElementById('foldIcon');
       panel.classList.remove('publish-unfold');
