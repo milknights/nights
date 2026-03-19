@@ -3,332 +3,116 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>博客系统</title>
+  <title>文章详情</title>
   <style>
     * {
       margin: 0;
       padding: 0;
       box-sizing: border-box;
-      font-family: "Microsoft Yahei", sans-serif;
+      font-family: "Microsoft Yahei", "PingFang SC", sans-serif;
     }
 
     body {
-      background: #f7f8fa;
-      max-width: 1200px;
+      background: linear-gradient(135deg, #f0f4ff 0%, #f8f9ff 100%);
+      min-height: 100vh;
+      max-width: 800px;
       margin: 0 auto;
-      padding: 20px;
-      padding-bottom: 300px;
+      padding: 40px 20px;
+      line-height: 1.8;
+      color: #2d3748;
     }
 
-    /* 博客标题栏 */
-    .blog-header {
-      text-align: center;
-      margin: 20px 0 30px;
+    /* 返回按钮 */
+    .back-btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      color: #6671ff;
+      text-decoration: none;
+      font-size: 15px;
+      margin-bottom: 30px;
+      padding: 6px 12px;
+      border-radius: 8px;
+      transition: background 0.3s;
     }
 
-    .blog-header input {
+    .back-btn:hover {
+      background: rgba(102, 113, 255, 0.1);
+    }
+
+    /* 文章详情容器 */
+    .article-detail {
+      background: #fff;
+      border-radius: 20px;
+      padding: 40px;
+      box-shadow: 0 4px 15px rgba(102, 113, 255, 0.08);
+    }
+
+    .article-title {
       font-size: 26px;
       font-weight: bold;
-      text-align: center;
-      border: none;
-      background: transparent;
-      outline: none;
+      color: #2d3748;
+      margin-bottom: 25px;
+      line-height: 1.4;
+    }
+
+    .article-img {
       width: 100%;
-      margin-bottom: 8px;
-    }
-
-    .blog-header textarea {
-      font-size: 15px;
-      color: #666;
-      text-align: center;
-      border: none;
-      background: transparent;
-      outline: none;
-      width: 100%;
-      resize: none;
-    }
-
-    /* 文章列表 */
-    .blog-list {
-      display: grid;
-      grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
-      gap: 20px;
-      margin-bottom: 60px;
-    }
-
-    .blog-card {
-      background: white;
+      max-height: 400px;
+      object-fit: cover;
       border-radius: 12px;
-      overflow: hidden;
-      box-shadow: 0 2px 10px rgba(0,0,0,0.08);
+      margin-bottom: 30px;
+      box-shadow: 0 3px 10px rgba(0, 0, 0, 0.05);
     }
 
-    /* 正方形图片 */
-    .blog-img {
-      width: 100%;
-      height: 260px;
-      object-fit: cover;
-      cursor: pointer;
-      display: block;
+    .article-content {
+      font-size: 16px;
+      color: #4a5568;
+      white-space: pre-line;
+      line-height: 1.9;
     }
 
-    .blog-info {
-      padding: 15px;
+    /* 无文章提示 */
+    .empty-detail {
+      text-align: center;
+      padding: 60px 20px;
+      color: #a0aec0;
+      font-size: 16px;
     }
 
-    .blog-title {
-      font-weight: bold;
-      margin-bottom: 8px;
-      cursor: pointer;
-    }
-
-    .blog-desc {
-      font-size: 13px;
-      color: #666;
-      margin-bottom: 10px;
-    }
-
-    button {
-      padding: 6px 10px;
-      border: none;
-      border-radius: 6px;
-      cursor: pointer;
-      font-size: 12px;
-      margin-right: 6px;
-    }
-
-    .btn-edit { background: #67c23a; color: white; }
-    .btn-del { background: #f56c6c; color: white; }
-
-    /* 底部发布区域 */
-    .publish-panel {
-      position: fixed;
-      bottom: 0;
-      left: 0;
-      right: 0;
-      background: white;
-      padding: 25px;
-      box-shadow: 0 -2px 15px rgba(0,0,0,0.1);
-      z-index: 999;
-    }
-
-    .publish-panel h3 {
-      margin-bottom: 15px;
-    }
-
-    .form-item {
-      margin-bottom: 12px;
-    }
-
-    .form-item label {
-      font-size: 13px;
-      font-weight: bold;
-      display: block;
-      margin-bottom: 4px;
-    }
-
-    input, textarea {
-      width: 100%;
-      padding: 8px 10px;
-      border: 1px solid #ddd;
-      border-radius: 6px;
-    }
-
-    .btn-publish {
-      background: #409eff;
-      color: white;
-      padding: 10px 20px;
-      font-size: 14px;
-    }
-
-    .btn-cancel {
-      background: #909399;
-      color: white;
-    }
-
-    /* 图片可拖动缩放 */
-    .resizable-img {
-      resize: both;
-      overflow: hidden;
-      border: 1px dashed #999;
-      padding: 5px;
-      width: 260px;
-      height: 260px;
-      margin: 10px 0;
-    }
-
-    .resizable-img img {
-      width: 100%;
-      height: 100%;
-      object-fit: cover;
+    @media (max-width: 768px) {
+      .article-detail {
+        padding: 25px;
+      }
+      .article-title {
+        font-size: 22px;
+      }
     }
   </style>
 </head>
-
 <body>
-  <!-- 博客标题 & 简介（可直接修改） -->
-  <div class="blog-header">
-    <input type="text" id="blogName" placeholder="点击修改博客名称">
-    <textarea id="blogDesc" rows="1" placeholder="点击修改博客简介"></textarea>
-  </div>
-
-  <!-- 文章列表 -->
-  <div class="blog-list" id="blogList"></div>
-
-  <!-- 底部发布区域 -->
-  <div class="publish-panel">
-    <h3 id="formTitle">发布新文章</h3>
-    <div class="form-item">
-      <label>文章标题</label>
-      <input type="text" id="title">
-    </div>
-    <div class="form-item">
-      <label>文章正文</label>
-      <textarea id="content" rows="3"></textarea>
-    </div>
-    <div class="form-item">
-      <label>上传图片（可拖动右下角缩放）</label>
-      <div class="resizable-img">
-        <img id="previewImg" style="display:none;">
-      </div>
-      <input type="file" id="imageUpload" accept="image/*" onchange="previewImage(event)">
-    </div>
-    <button class="btn-publish" onclick="save()">确认发布</button>
-    <button class="btn-cancel" onclick="resetForm()">取消</button>
-  </div>
+  <a href="index.html" class="back-btn">← 返回首页</a>
+  <div id="detailContainer"></div>
 
   <script>
-    // 加载博客名称与简介
-    let blogConfig = JSON.parse(localStorage.getItem("blogConfig")) || {
-      name: "我的个人博客",
-      desc: "记录生活与灵感"
-    };
-    document.getElementById("blogName").value = blogConfig.name;
-    document.getElementById("blogDesc").value = blogConfig.desc;
+    // 获取文章ID
+    const params = new URLSearchParams(location.search);
+    const articleId = params.get('id');
+    const articleList = JSON.parse(localStorage.getItem('articleList')) || [];
+    const container = document.getElementById('detailContainer');
 
-    // 实时保存博客名称简介
-    document.getElementById("blogName").addEventListener("input", updateBlogInfo);
-    document.getElementById("blogDesc").addEventListener("input", updateBlogInfo);
-
-    function updateBlogInfo() {
-      blogConfig.name = document.getElementById("blogName").value;
-      blogConfig.desc = document.getElementById("blogDesc").value;
-      localStorage.setItem("blogConfig", JSON.stringify(blogConfig));
+    if (articleId !== null && articleList[articleId]) {
+      const item = articleList[articleId];
+      container.innerHTML = `
+        <div class="article-detail">
+          <h1 class="article-title">${item.title}</h1>
+          <img src="${item.img}" class="article-img" alt="文章图片">
+          <div class="article-content">${item.content}</div>
+        </div>
+      `;
+    } else {
+      container.innerHTML = '<div class="empty-detail">文章不存在或已删除～</div>';
     }
-
-    // 文章数据
-    let blogs = JSON.parse(localStorage.getItem("blogs")) || [];
-    let currentEditId = null;
-
-    // 预览图片
-    function previewImage(event) {
-      let file = event.target.files[0];
-      if (!file) return;
-      let reader = new FileReader();
-      reader.onload = function(e) {
-        let img = document.getElementById("previewImg");
-        img.src = e.target.result;
-        img.style.display = "block";
-      };
-      reader.readAsDataURL(file);
-    }
-
-    // 渲染文章
-    function render() {
-      const list = document.getElementById("blogList");
-      list.innerHTML = "";
-      blogs.forEach((item, i) => {
-        list.innerHTML += `
-        <div class="blog-card">
-          <img src="${item.image}" class="blog-img" onclick="goDetail(${i})">
-          <div class="blog-info">
-            <div class="blog-title" onclick="goDetail(${i})">${item.title}</div>
-            <div class="blog-desc">${item.content.substring(0, 50)}...</div>
-            <button class="btn-edit" onclick="edit(${i})">编辑</button>
-            <button class="btn-del" onclick="del(${i})">删除</button>
-          </div>
-        </div>`;
-      });
-    }
-
-    // 跳转详情
-    function goDetail(id) {
-      location.href = "detail.html?id=" + id;
-    }
-
-    // 保存 / 发布
-    function save() {
-      let title = document.getElementById("title").value.trim();
-      let content = document.getElementById("content").value.trim();
-      let img = document.getElementById("previewImg");
-
-      if (!title || !content) {
-        alert("标题和正文不能为空！");
-        return;
-      }
-
-      // 编辑
-      if (currentEditId !== null) {
-        blogs[currentEditId].title = title;
-        blogs[currentEditId].content = content;
-        if (img.src && img.style.display !== "none") {
-          blogs[currentEditId].image = img.src;
-        }
-        saveAndRender();
-        return;
-      }
-
-      // 新增
-      if (!img.src || img.style.display === "none") {
-        alert("请上传图片！");
-        return;
-      }
-
-      blogs.unshift({
-        title, content, image: img.src
-      });
-      saveAndRender();
-    }
-
-    function saveAndRender() {
-      localStorage.setItem("blogs", JSON.stringify(blogs));
-      resetForm();
-      render();
-      alert("保存成功！");
-    }
-
-    // 编辑
-    function edit(id) {
-      currentEditId = id;
-      let item = blogs[id];
-      document.getElementById("title").value = item.title;
-      document.getElementById("content").value = item.content;
-      document.getElementById("previewImg").src = item.image;
-      document.getElementById("previewImg").style.display = "block";
-      document.getElementById("formTitle").innerText = "编辑文章";
-    }
-
-    // 删除
-    function del(id) {
-      if (confirm("确定删除？")) {
-        blogs.splice(id, 1);
-        localStorage.setItem("blogs", JSON.stringify(blogs));
-        render();
-      }
-    }
-
-    // 清空
-    function resetForm() {
-      document.getElementById("title").value = "";
-      document.getElementById("content").value = "";
-      document.getElementById("previewImg").src = "";
-      document.getElementById("previewImg").style.display = "none";
-      document.getElementById("imageUpload").value = "";
-      document.getElementById("formTitle").innerText = "发布新文章";
-      currentEditId = null;
-    }
-
-    render();
   </script>
 </body>
 </html>
