@@ -22,7 +22,6 @@
       color: #333;
     }
 
-    /* 顶部博客头像+名称简介区域 */
     .blog-top {
       background: #ffffff;
       border-radius: 20px;
@@ -33,7 +32,6 @@
       position: relative;
     }
 
-    /* 头像样式 - 圆形 */
     .avatar-box {
       width: 100px;
       height: 100px;
@@ -56,419 +54,184 @@
       object-fit: cover;
     }
 
-    .avatar-upload {
-      display: none;
-    }
+    .avatar-upload { display: none; }
+    .change-avatar-tip { font-size: 12px; color: #6671ff; margin-bottom: 10px; cursor: pointer; }
 
-    .change-avatar-tip {
-      font-size: 12px;
-      color: #6671ff;
-      margin-bottom: 10px;
-      cursor: pointer;
-    }
-
-    /* 博客名称与简介 */
     #blogName {
-      font-size: 28px;
-      font-weight: bold;
-      color: #2d3748;
-      border: none;
-      background: transparent;
-      outline: none;
-      text-align: center;
-      width: 80%;
-      margin: 0 auto 8px;
-      border-bottom: 2px dashed transparent;
-      transition: border 0.3s;
+      font-size: 28px; font-weight: bold; color: #2d3748; border: none; background: transparent;
+      outline: none; text-align: center; width: 80%; margin: 0 auto 8px;
+      border-bottom: 2px dashed transparent; transition: border 0.3s;
     }
-
-    #blogName:focus {
-      border-color: #6671ff;
-    }
+    #blogName:focus { border-color: #6671ff; }
 
     #blogDesc {
-      font-size: 15px;
-      color: #718096;
-      border: none;
-      background: transparent;
-      outline: none;
-      text-align: center;
-      width: 90%;
-      resize: none;
-      border-bottom: 1px dashed transparent;
-      transition: border 0.3s;
+      font-size: 15px; color: #718096; border: none; background: transparent;
+      outline: none; text-align: center; width: 90%; resize: none;
+      border-bottom: 1px dashed transparent; transition: border 0.3s;
     }
+    #blogDesc:focus { border-color: #e2e8f0; }
 
-    #blogDesc:focus {
-      border-color: #e2e8f0;
-    }
-
-    /* 首页主布局：左右1:1等比例，无分割线，弹性布局 */
     .home-layout {
-      display: flex;
-      gap: 30px;
-      align-items: flex-start;
-      margin-bottom: 40px;
-      width: 100%;
+      display: flex; gap: 30px; align-items: flex-start;
+      margin-bottom: 40px; width: 100%;
     }
 
-    /* 左侧：博客列表区域，1:1比例，双排网格布局 */
     .blog-list-sidebar {
-      width: 50%;
-      display: grid;
-      grid-template-columns: repeat(2, 1fr);
-      gap: 20px;
+      width: 50%; display: grid; grid-template-columns: repeat(2, 1fr); gap: 20px;
     }
 
-    /* 右侧：预览区域，1:1比例，空数据时完全隐藏 */
     .blog-preview {
-      width: 50%;
-      background: #fff;
-      border-radius: 16px;
-      padding: 25px;
+      width: 50%; background: #fff; border-radius: 16px; padding: 25px;
       box-shadow: 0 3px 12px rgba(102, 113, 255, 0.07);
-      min-height: 400px;
-      display: flex;
-      align-items: center;
-      justify-content: center;
+      min-height: 400px; display: flex; align-items: center; justify-content: center;
     }
+    .blog-preview.empty { display: none; }
 
-    /* 空数据状态：隐藏预览区域，不展示任何图片和空白框 */
-    .blog-preview.empty {
-      display: none;
-    }
-
-    /* 预览图片容器，缩放为2/3大小 */
     .preview-img-box {
-      width: 66.6%;
-      aspect-ratio: 1/1;
-      overflow: hidden;
-      border-radius: 12px;
+      width: 66.6%; aspect-ratio: 1/1; overflow: hidden; border-radius: 12px;
     }
+    .preview-img { width: 100%; height: 100%; object-fit: cover; }
 
-    .preview-img {
-      width: 100%;
-      height: 100%;
-      object-fit: cover;
-    }
-
-    /* 左侧双排缩略图卡片，首页隐藏正文、编辑删除按钮 */
     .blog-thumb-item {
-      background: #ffffff;
-      border-radius: 12px;
-      overflow: hidden;
+      background: #fff; border-radius: 12px; overflow: hidden;
       box-shadow: 0 3px 10px rgba(102, 113, 255, 0.06);
-      transition: all 0.3s ease;
-      cursor: pointer;
+      transition: all 0.3s ease; cursor: pointer;
     }
-
-    /* 缩略图大小为2/3，居中展示 */
     .blog-thumb-img {
-      width: 66.6%;
-      aspect-ratio: 1/1;
-      object-fit: cover;
-      margin: 15px auto;
-      border-radius: 8px;
-      display: block;
+      width: 66.6%; aspect-ratio: 1/1; object-fit: cover;
+      margin: 15px auto; border-radius: 8px; display: block;
     }
-
     .blog-thumb-item:hover {
-      transform: translateY(-3px);
-      box-shadow: 0 6px 15px rgba(102, 113, 255, 0.1);
+      transform: translateY(-3px); box-shadow: 0 6px 15px rgba(102, 113, 255, 0.1);
     }
-
     .blog-thumb-title {
-      padding: 0 15px 15px;
-      font-size: 16px;
-      font-weight: 600;
-      color: #2d3748;
-      text-align: center;
-      line-height: 1.4;
+      padding: 0 15px 15px; font-size: 16px; font-weight: 600;
+      color: #2d3748; text-align: center; line-height: 1.4;
     }
 
-    /* 分页区域 */
     .pagination {
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      gap: 12px;
-      margin: 30px 0;
+      display: flex; justify-content: center; align-items: center;
+      gap: 12px; margin: 30px 0;
     }
-
     .page-btn {
-      background: #fff;
-      color: #6671ff;
-      border: 1px solid #e2e8f0;
-      padding: 8px 14px;
-      border-radius: 8px;
-      cursor: pointer;
+      background: #fff; color: #6671ff; border: 1px solid #e2e8f0;
+      padding: 8px 14px; border-radius: 8px; cursor: pointer;
     }
-
     .page-btn:disabled {
-      background: #f7fafc;
-      color: #a0aec0;
-      cursor: not-allowed;
-      border-color: #e2e8f0;
+      background: #f7fafc; color: #a0aec0; cursor: not-allowed; border-color: #e2e8f0;
     }
+    .page-btn.active { background: #6671ff; color: #fff; border-color: #6671ff; }
 
-    .page-btn.active {
-      background: #6671ff;
-      color: #fff;
-      border-color: #6671ff;
-    }
-
-    /* 底部固定发布编辑区域 - 折叠展开功能 */
     .publish-footer {
-      position: fixed;
-      bottom: 0;
-      left: 0;
-      right: 0;
-      background: #ffffff;
+      position: fixed; bottom: 0; left: 0; right: 0; background: #fff;
       box-shadow: 0 -4px 20px rgba(102, 113, 255, 0.1);
-      z-index: 999;
-      border-top-left-radius: 20px;
-      border-top-right-radius: 20px;
+      z-index: 999; border-top-left-radius: 20px; border-top-right-radius: 20px;
       transition: all 0.3s ease;
     }
+    .publish-fold { height: 60px !important; overflow: hidden; }
+    .publish-unfold { height: auto; }
+    .publish-inner { max-width: 1200px; margin: 0 auto; padding: 0 30px; }
 
-    /* 折叠状态：高度固定60px，彻底隐藏表单 */
-    .publish-fold {
-      height: 60px !important;
-      overflow: hidden;
-    }
-
-    /* 展开状态：自适应高度 */
-    .publish-unfold {
-      height: auto;
-    }
-
-    .publish-inner {
-      max-width: 1200px;
-      margin: 0 auto;
-      padding: 0 30px;
-    }
-
-    /* 折叠开关栏 */
     .fold-toggle-bar {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      height: 60px;
-      padding: 0 10px;
-      cursor: pointer;
-      border-bottom: 1px solid #f0f0f0;
+      display: flex; justify-content: space-between; align-items: center;
+      height: 60px; padding: 0 10px; cursor: pointer; border-bottom: 1px solid #f0f0f0;
     }
+    .fold-toggle-bar h3 { color: #2d3748; font-size: 18px; font-weight: 600; margin: 0; }
+    .fold-icon { font-size: 16px; color: #6671ff; transition: transform 0.3s; }
+    .fold-icon.rotate { transform: rotate(180deg); }
 
-    .fold-toggle-bar h3 {
-      color: #2d3748;
-      font-size: 18px;
-      font-weight: 600;
-      margin: 0;
-    }
+    .publish-content { padding: 20px 0 30px; display: none; }
+    .publish-unfold .publish-content { display: block; }
 
-    .fold-icon {
-      font-size: 16px;
-      color: #6671ff;
-      transition: transform 0.3s ease;
-    }
-
-    .fold-icon.rotate {
-      transform: rotate(180deg);
-    }
-
-    /* 发布表单内容：折叠隐藏，展开显示 */
-    .publish-content {
-      padding: 20px 0 30px;
-      display: none;
-    }
-
-    .publish-unfold .publish-content {
-      display: block;
-    }
-
-    /* 富文本编辑工具栏 */
     .editor-toolbar {
-      display: flex;
-      gap: 10px;
-      margin-bottom: 15px;
-      padding: 10px;
-      background: #f8f9ff;
-      border-radius: 8px;
-      flex-wrap: wrap;
+      display: flex; gap: 10px; margin-bottom: 15px; padding: 10px;
+      background: #f8f9ff; border-radius: 8px; flex-wrap: wrap;
     }
-
     .editor-toolbar button {
-      padding: 6px 12px;
-      border: 1px solid #e2e8f0;
-      background: #fff;
-      border-radius: 6px;
-      cursor: pointer;
-      font-size: 14px;
-      transition: all 0.2s;
+      padding: 6px 12px; border: 1px solid #e2e8f0; background: #fff;
+      border-radius: 6px; cursor: pointer; font-size: 14px; transition: all 0.2s;
     }
+    .editor-toolbar button:hover { background: #6671ff; color: #fff; border-color: #6671ff; }
+    #colorPicker { width: 40px; height: 32px; border: none; cursor: pointer; }
 
-    .editor-toolbar button:hover {
-      background: #6671ff;
-      color: #fff;
-      border-color: #6671ff;
-    }
-
-    #colorPicker {
-      width: 40px;
-      height: 32px;
-      border: none;
-      cursor: pointer;
-    }
-
-    .form-row {
-      display: flex;
-      flex-direction: column;
-      gap: 15px;
-      margin-bottom: 15px;
-    }
-
-    .form-item {
-      display: flex;
-      flex-direction: column;
-      gap: 6px;
-    }
-
-    .form-item label {
-      font-size: 14px;
-      font-weight: 500;
-      color: #4a5568;
-    }
+    .form-row { display: flex; flex-direction: column; gap: 15px; margin-bottom: 15px; }
+    .form-item { display: flex; flex-direction: column; gap: 6px; }
+    .form-item label { font-size: 14px; font-weight: 500; color: #4a5568; }
 
     input, textarea {
-      padding: 10px 12px;
-      border: 1px solid #e2e8f0;
-      border-radius: 8px;
-      outline: none;
-      transition: border 0.3s;
-      font-size: 14px;
+      padding: 10px 12px; border: 1px solid #e2e8f0; border-radius: 8px;
+      outline: none; transition: border 0.3s; font-size: 14px;
     }
+    input:focus, textarea:focus { border-color: #6671ff; }
 
-    input:focus, textarea:focus {
-      border-color: #6671ff;
-    }
-
-    /* 富文本编辑框 */
     #articleEditor {
-      min-height: 180px;
-      padding: 15px;
-      border: 1px solid #e2e8f0;
-      border-radius: 8px;
-      outline: none;
-      line-height: 1.6;
+      min-height: 180px; padding: 15px; border: 1px solid #e2e8f0;
+      border-radius: 8px; outline: none; line-height: 1.6;
     }
 
-    /* 图片上传区域：封面图+正文图，主流缩放裁切 */
-    .img-upload-group {
-      display: flex;
-      gap: 25px;
-      flex-wrap: wrap;
+    /* 主流图片裁剪容器 */
+    .img-upload-group { display: flex; gap: 25px; flex-wrap: wrap; margin: 10px 0; }
+    .crop-wrapper {
+      position: relative; width: 220px; height: 220px;
+      border: 2px solid #e2e8f0; border-radius: 12px;
+      background: #f8f9ff; overflow: hidden;
     }
-
-    /* 主流图片裁切容器 - 仿社交平台/修图工具样式 */
-    .crop-container {
-      position: relative;
-      width: 200px;
-      height: 200px;
-      border: 2px solid #e2e8f0;
-      border-radius: 12px;
-      overflow: hidden;
-      margin: 10px 0;
-      background: #f8f9ff;
-      cursor: move;
-    }
-
-    /* 裁切框内图片样式，支持缩放拖动 */
-    .crop-target-img {
-      position: absolute;
-      max-width: none;
+    .crop-img {
+      position: absolute; left: 0; top: 0;
       transform-origin: center center;
-      user-select: none;
+      cursor: move; max-width: none;
     }
-
-    /* 裁切操作提示 */
-    .crop-tip {
+    .crop-frame {
+      position: absolute; left: 10px; top: 10px;
+      width: 200px; height: 200px;
+      border: 2px solid #6671ff;
+      border-radius: 8px;
+      box-shadow: 0 0 0 1000px rgba(0,0,0,0.2);
+      pointer-events: none;
+    }
+    .crop-controls {
+      display: flex; gap: 6px; margin-top: 8px;
+    }
+    .crop-btn {
+      padding: 6px 10px; background: #6671ff; color: #fff;
+      border: none; border-radius: 6px; cursor: pointer;
       font-size: 12px;
-      color: #718096;
-      margin-top: 5px;
-      line-height: 1.4;
     }
-
-    .file-upload {
-      font-size: 13px;
+    .crop-tip {
+      font-size: 12px; color: #718096; margin-top: 5px; line-height: 1.4;
     }
+    .file-upload { font-size: 13px; margin-top: 6px; }
 
-    .publish-btn-group {
-      display: flex;
-      gap: 10px;
-      margin-top: 10px;
-    }
-
+    .publish-btn-group { display: flex; gap: 10px; margin-top: 10px; }
     .btn-save {
-      background: #6671ff;
-      color: #fff;
-      padding: 10px 22px;
-      font-size: 14px;
-      border: none;
-      border-radius: 8px;
-      cursor: pointer;
+      background: #6671ff; color: #fff; padding: 10px 22px;
+      font-size: 14px; border: none; border-radius: 8px; cursor: pointer;
     }
-
-    .btn-save:hover {
-      background: #4f5bff;
-    }
-
+    .btn-save:hover { background: #4f5bff; }
     .btn-cancel {
-      background: #a0aec0;
-      color: #fff;
-      padding: 10px 22px;
-      font-size: 14px;
-      border: none;
-      border-radius: 8px;
-      cursor: pointer;
+      background: #a0aec0; color: #fff; padding: 10px 22px;
+      font-size: 14px; border: none; border-radius: 8px; cursor: pointer;
     }
+    .btn-cancel:hover { background: #718096; }
 
-    .btn-cancel:hover {
-      background: #718096;
-    }
-
-    /* 空数据提示，无内容时仅展示提示，不出现图片和空白框 */
     .empty-tip {
-      text-align: center;
-      padding: 60px 20px;
-      color: #a0aec0;
-      font-size: 15px;
-      grid-column: 1 / 3;
+      text-align: center; padding: 60px 20px;
+      color: #a0aec0; font-size: 15px; grid-column: 1 / 3;
     }
 
     @media (max-width: 768px) {
-      .home-layout {
-        flex-direction: column;
-      }
-      .blog-list-sidebar, .blog-preview {
-        width: 100%;
-      }
-      .blog-list-sidebar {
-        grid-template-columns: 1fr;
-      }
-      .blog-top {
-        padding: 20px;
-      }
-      .publish-inner {
-        padding: 0 20px;
-      }
+      .home-layout { flex-direction: column; }
+      .blog-list-sidebar, .blog-preview { width: 100%; }
+      .blog-list-sidebar { grid-template-columns: 1fr; }
+      .blog-top { padding: 20px; }
+      .publish-inner { padding: 0 20px; }
     }
   </style>
 </head>
 <body>
-  <!-- 顶部博客头像+名称简介 -->
   <div class="blog-top">
     <div class="avatar-box" onclick="document.getElementById('avatarUpload').click()">
-      <img src="" class="avatar-img" id="avatarShow" alt="博客头像">
+      <img src="" class="avatar-img" id="avatarShow">
     </div>
     <p class="change-avatar-tip" onclick="document.getElementById('avatarUpload').click()">点击更换头像</p>
     <input type="file" id="avatarUpload" class="avatar-upload" accept="image/*" onchange="uploadAvatar(event)">
@@ -476,56 +239,62 @@
     <textarea id="blogDesc" rows="1" placeholder="点击修改博客简介"></textarea>
   </div>
 
-  <!-- 首页1:1两列布局 -->
   <div class="home-layout">
-    <!-- 左侧：双排博客缩略图列表 -->
     <div class="blog-list-sidebar" id="blogThumbList"></div>
-    <!-- 右侧：悬浮预览大图，空数据隐藏 -->
     <div class="blog-preview" id="previewWrapper">
       <div class="preview-img-box">
-        <img src="" id="previewMainImg" alt="博客预览图">
+        <img src="" id="previewMainImg">
       </div>
     </div>
   </div>
 
-  <!-- 分页控件 -->
   <div class="pagination" id="pagination"></div>
 
-  <!-- 底部固定发布编辑栏 - 默认折叠 -->
   <div class="publish-footer publish-fold" id="publishPanel">
     <div class="publish-inner">
-      <!-- 折叠开关栏 -->
       <div class="fold-toggle-bar" onclick="togglePublishPanel()">
         <h3 id="formTitle">发布新文章</h3>
         <span class="fold-icon" id="foldIcon">▼</span>
       </div>
-      <!-- 发布编辑表单 -->
       <div class="publish-content">
         <div class="form-row">
           <div class="form-item">
             <label>文章标题</label>
             <input type="text" id="articleTitle" placeholder="请输入文章标题">
           </div>
-          <!-- 双图片上传：封面图+正文图，主流缩放裁切 -->
-          <div class="img-upload-group">
-            <div class="form-item">
-              <label>上传封面图（首页展示）</label>
-              <div class="crop-container" id="coverCropWrap">
-                <img class="crop-target-img" id="coverCropImg" style="display: none;">
-              </div>
-              <p class="crop-tip">💡 操作：鼠标拖动定位，滚轮放大缩小，固定比例裁切</p>
-              <input type="file" id="coverUpload" class="file-upload" accept="image/*" onchange="initNormalCrop(event, 'cover')">
+
+          <!-- 封面图裁剪 -->
+          <div class="form-item">
+            <label>上传封面图（首页展示）</label>
+            <div class="crop-wrapper" id="coverCropWrap">
+              <img class="crop-img" id="coverCropImg" style="display:none">
+              <div class="crop-frame"></div>
             </div>
-            <div class="form-item">
-              <label>上传正文图（仅详情页展示）</label>
-              <div class="crop-container" id="contentCropWrap">
-                
-              </div>
-              <p class="crop-tip">💡 操作：鼠标拖动定位，滚轮放大缩小，固定比例裁切</p>
-              <input type="file" id="contentUpload" class="file-upload" accept="image/*" onchange="initNormalCrop(event, 'content')">
+            <div class="crop-controls">
+              <button class="crop-btn" onclick="zoomImg('cover', 1.1)">放大 +</button>
+              <button class="crop-btn" onclick="zoomImg('cover', 0.9)">缩小 -</button>
+              <button class="crop-btn" onclick="smartCrop('cover')">智能裁剪</button>
             </div>
+            <p class="crop-tip">拖动图片定位 + 滚轮缩放 / 按钮缩放</p>
+            <input type="file" id="coverUpload" class="file-upload" accept="image/*" onchange="loadCropImage(event, 'cover')">
           </div>
-          <!-- 富文本编辑工具栏 -->
+
+          <!-- 正文图裁剪 -->
+          <div class="form-item">
+            <label>上传正文图（详情页展示）</label>
+            <div class="crop-wrapper" id="contentCropWrap">
+              <img class="crop-img" id="contentCropImg" style="display:none">
+              <div class="crop-frame"></div>
+            </div>
+            <div class="crop-controls">
+              <button class="crop-btn" onclick="zoomImg('content', 1.1)">放大 +</button>
+              <button class="crop-btn" onclick="zoomImg('content', 0.9)">缩小 -</button>
+              <button class="crop-btn" onclick="smartCrop('content')">智能裁剪</button>
+            </div>
+            <p class="crop-tip">拖动图片定位 + 滚轮缩放 / 按钮缩放</p>
+            <input type="file" id="contentUpload" class="file-upload" accept="image/*" onchange="loadCropImage(event, 'content')">
+          </div>
+
           <div class="form-item">
             <label>文章内容（可编辑样式）</label>
             <div class="editor-toolbar">
@@ -534,9 +303,10 @@
               <button onclick="setTextColor()">字体颜色</button>
               <input type="color" id="colorPicker" value="#333333">
             </div>
-            <div id="articleEditor" contenteditable="true" placeholder="请输入文章内容，可上方调整样式"></div>
+            <div id="articleEditor" contenteditable="true" placeholder="请输入文章内容"></div>
           </div>
         </div>
+
         <div class="publish-btn-group">
           <button class="btn-save" onclick="saveArticle()">确认发布</button>
           <button class="btn-cancel" onclick="resetForm()">取消</button>
@@ -546,72 +316,50 @@
   </div>
 
   <script>
-    // 全局配置
     const PAGE_SIZE = 6;
     let currentPage = 1;
     let editArticleId = null;
-    // 主流裁切全局变量
-    let coverScale = 1, contentScale = 1;
-    let coverOffsetX = 0, coverOffsetY = 0;
-    let contentOffsetX = 0, contentOffsetY = 0;
-    let isDragging = false, startX = 0, startY = 0, currentCropTarget = '';
 
-    // 加载本地数据
+    // 裁剪状态
+    let cover = { scale: 1, x: 0, y: 0, dragging: false };
+    let content = { scale: 1, x: 0, y: 0, dragging: false };
+
     let blogConfig = JSON.parse(localStorage.getItem('blogConfig')) || {
-      blogName: '我的个人博客',
-      blogDesc: '分享生活点滴，记录美好瞬间',
-      avatar: ''
+      blogName: '我的个人博客', blogDesc: '分享生活', avatar: ''
     };
     let articleList = JSON.parse(localStorage.getItem('articleList')) || [];
 
-    // 初始化页面
-    window.onload = function() {
+    window.onload = function () {
       initBlogInfo();
-      // 监听详情页编辑跳转
       const editId = new URLSearchParams(location.search).get('edit');
-      if(editId && articleList[editId]) {
-        editArticle(editId);
-      }
+      if (editId && articleList[editId]) editArticle(editId);
       renderPage();
     };
 
-    // 发布面板折叠/展开
     function togglePublishPanel() {
       const panel = document.getElementById('publishPanel');
       const icon = document.getElementById('foldIcon');
-      if (panel.classList.contains('publish-fold')) {
-        panel.classList.remove('publish-fold');
-        panel.classList.add('publish-unfold');
-        icon.classList.add('rotate');
-      } else {
-        panel.classList.remove('publish-unfold');
-        panel.classList.add('publish-fold');
-        icon.classList.remove('rotate');
-      }
+      panel.classList.toggle('publish-fold');
+      panel.classList.toggle('publish-unfold');
+      icon.classList.toggle('rotate');
     }
 
-    // 富文本编辑命令执行
     function execCmd(cmd) {
       document.execCommand(cmd, false, null);
       document.getElementById('articleEditor').focus();
     }
-
-    // 设置字体颜色
     function setTextColor() {
-      const color = document.getElementById('colorPicker').value;
-      document.execCommand('foreColor', false, color);
+      const c = document.getElementById('colorPicker').value;
+      document.execCommand('foreColor', false, c);
       document.getElementById('articleEditor').focus();
     }
 
-    // 初始化博客信息
     function initBlogInfo() {
       document.getElementById('blogName').value = blogConfig.blogName;
       document.getElementById('blogDesc').value = blogConfig.blogDesc;
-      const avatarImg = document.getElementById('avatarShow');
-      avatarImg.src = blogConfig.avatar || 'https://picsum.photos/100/100';
+      document.getElementById('avatarShow').src = blogConfig.avatar || 'https://picsum.photos/100/100';
     }
 
-    // 保存博客信息
     document.getElementById('blogName').addEventListener('input', saveBlogInfo);
     document.getElementById('blogDesc').addEventListener('input', saveBlogInfo);
     function saveBlogInfo() {
@@ -620,216 +368,169 @@
       localStorage.setItem('blogConfig', JSON.stringify(blogConfig));
     }
 
-    // 头像上传
     function uploadAvatar(e) {
-      const file = e.target.files[0];
-      if (!file) return;
-      const reader = new FileReader();
-      reader.onload = function(res) {
+      const f = e.target.files[0];
+      if (!f) return;
+      const r = new FileReader();
+      r.onload = (res) => {
         blogConfig.avatar = res.target.result;
         document.getElementById('avatarShow').src = res.target.result;
         localStorage.setItem('blogConfig', JSON.stringify(blogConfig));
-        alert('头像更换成功！');
+        alert('头像更新成功');
       };
-      reader.readAsDataURL(file);
+      r.readAsDataURL(f);
     }
 
-    // ==================== 主流图片裁切核心逻辑（替换原有粗糙逻辑）====================
-    /**
-     * 初始化标准裁切：支持拖动定位+滚轮缩放，原生无插件，流畅易用
-     * type: cover/content 区分封面图和正文图
-     */
-    function initNormalCrop(e, type) {
+    // ==============================================
+    // 主流图片裁剪核心（原图 + 裁剪框 + 按钮缩放 + 滚轮 + 智能裁剪）
+    // ==============================================
+    function loadCropImage(e, type) {
       const file = e.target.files[0];
       if (!file) return;
-      const imgId = type === 'cover' ? 'coverCropImg' : 'contentCropImg';
-      const wrapId = type === 'cover' ? 'coverCropWrap' : 'contentCropWrap';
-      const imgEl = document.getElementById(imgId);
-      const wrapEl = document.getElementById(wrapId);
-
-      const reader = new FileReader();
-      reader.onload = function(res) {
-        // 重置缩放和偏移量
-        if(type === 'cover') {
-          coverScale = 1;
-          coverOffsetX = 0;
-          coverOffsetY = 0;
-        } else {
-          contentScale = 1;
-          contentOffsetX = 0;
-          contentOffsetY = 0;
-        }
-        // 渲染图片并绑定事件
-        imgEl.src = res.target.result;
-        imgEl.style.display = 'block';
-        imgEl.style.transform = `translate(${type === 'cover' ? coverOffsetX : contentOffsetX}px, ${type === 'cover' ? coverOffsetY : contentOffsetY}px) scale(${type === 'cover' ? coverScale : contentScale})`;
-        bindCropEvents(wrapEl, imgEl, type);
+      const img = document.getElementById(type + 'CropImg');
+      const r = new FileReader();
+      r.onload = () => {
+        img.src = r.result;
+        img.style.display = 'block';
+        resetCrop(type);
+        bindDrag(type);
+        bindWheel(type);
       };
-      reader.readAsDataURL(file);
+      r.readAsDataURL(file);
     }
 
-    // 绑定裁切交互事件：拖动+滚轮缩放
-    function bindCropEvents(wrapEl, imgEl, type) {
-      // 鼠标按下 - 开始拖动
-      wrapEl.onmousedown = function(e) {
-        isDragging = true;
-        currentCropTarget = type;
-        startX = e.clientX;
-        startY = e.clientY;
+    function resetCrop(type) {
+      const t = type === 'cover' ? cover : content;
+      t.scale = 1; t.x = 0; t.y = 0;
+      updateCrop(type);
+    }
+
+    function updateCrop(type) {
+      const t = type === 'cover' ? cover : content;
+      const img = document.getElementById(type + 'CropImg');
+      img.style.transform = `translate(${t.x}px, ${t.y}px) scale(${t.scale})`;
+    }
+
+    function bindDrag(type) {
+      const img = document.getElementById(type + 'CropImg');
+      const t = type === 'cover' ? cover : content;
+      let startX, startY;
+
+      img.onmousedown = (e) => {
+        t.dragging = true;
+        startX = e.clientX - t.x;
+        startY = e.clientY - t.y;
         e.preventDefault();
       };
-
-      // 鼠标移动 - 实时定位
-      document.onmousemove = function(e) {
-        if(!isDragging) return;
-        const dx = e.clientX - startX;
-        const dy = e.clientY - startY;
-        startX = e.clientX;
-        startY = e.clientY;
-
-        // 更新对应图片偏移
-        if(currentCropTarget === 'cover') {
-          coverOffsetX += dx;
-          coverOffsetY += dy;
-          imgEl.style.transform = `translate(${coverOffsetX}px, ${coverOffsetY}px) scale(${coverScale})`;
-        } else {
-          contentOffsetX += dx;
-          contentOffsetY += dy;
-          imgEl.style.transform = `translate(${contentOffsetX}px, ${contentOffsetY}px) scale(${contentScale})`;
-        }
+      document.onmousemove = (e) => {
+        if (!t.dragging) return;
+        t.x = e.clientX - startX;
+        t.y = e.clientY - startY;
+        updateCrop(type);
       };
+      document.onmouseup = () => t.dragging = false;
+    }
 
-      // 鼠标松开 - 结束拖动
-      document.onmouseup = function() {
-        isDragging = false;
-        currentCropTarget = '';
-      };
-
-      // 滚轮缩放 - 主流放大缩小逻辑
-      wrapEl.onwheel = function(e) {
+    function bindWheel(type) {
+      const wrap = document.getElementById(type + 'CropWrap');
+      wrap.onwheel = (e) => {
         e.preventDefault();
-        const scaleStep = 0.1;
-        let newScale;
-
-        if(type === 'cover') {
-          newScale = e.deltaY < 0 ? coverScale + scaleStep : coverScale - scaleStep;
-          newScale = Math.max(0.5, Math.min(newScale, 3)); // 限制缩放范围0.5-3倍
-          coverScale = newScale;
-          imgEl.style.transform = `translate(${coverOffsetX}px, ${coverOffsetY}px) scale(${coverScale})`;
-        } else {
-          newScale = e.deltaY < 0 ? contentScale + scaleStep : contentScale - scaleStep;
-          newScale = Math.max(0.5, Math.min(newScale, 3));
-          contentScale = newScale;
-          imgEl.style.transform = `translate(${contentOffsetX}px, ${contentOffsetY}px) scale(${contentScale})`;
-        }
+        const t = type === 'cover' ? cover : content;
+        t.scale *= e.deltaY < 0 ? 1.1 : 0.9;
+        t.scale = Math.max(0.5, Math.min(t.scale, 3));
+        updateCrop(type);
       };
     }
 
-    // 编辑文章时回填裁切状态
-    function fillCropState(type, imgUrl) {
-      const imgId = type === 'cover' ? 'coverCropImg' : 'contentCropImg';
-      const wrapId = type === 'cover' ? 'coverCropWrap' : 'contentCropWrap';
-      const imgEl = document.getElementById(imgId);
-      const wrapEl = document.getElementById(wrapId);
-      imgEl.src = imgUrl;
-      imgEl.style.display = 'block';
-
-      if(type === 'cover') {
-        imgEl.style.transform = `translate(${coverOffsetX}px, ${coverOffsetY}px) scale(${coverScale})`;
-      } else {
-        imgEl.style.transform = `translate(${contentOffsetX}px, ${contentOffsetY}px) scale(${contentScale})`;
-      }
-      bindCropEvents(wrapEl, imgEl, type);
+    function zoomImg(type, factor) {
+      const t = type === 'cover' ? cover : content;
+      t.scale *= factor;
+      t.scale = Math.max(0.5, Math.min(t.scale, 3));
+      updateCrop(type);
     }
-    // ==================================================================================
 
-    // 渲染首页列表+预览，空数据时隐藏右侧预览区
+    function smartCrop(type) {
+      const t = type === 'cover' ? cover : content;
+      t.scale = 1;
+      t.x = 0;
+      t.y = 0;
+      updateCrop(type);
+    }
+
+    // ==============================================
+    // 页面渲染
+    // ==============================================
     function renderPage() {
       const listEl = document.getElementById('blogThumbList');
       const previewWrapper = document.getElementById('previewWrapper');
-      const totalPage = Math.ceil(articleList.length / PAGE_SIZE);
+      const total = Math.ceil(articleList.length / PAGE_SIZE);
       const start = (currentPage - 1) * PAGE_SIZE;
-      const end = start + PAGE_SIZE;
-      const currentList = articleList.slice(start, end);
+      const items = articleList.slice(start, start + PAGE_SIZE);
 
-      // 无文章数据：隐藏右侧预览，仅展示空提示
-      if (currentList.length === 0) {
-        listEl.innerHTML = '<div class="empty-tip">暂无文章，快去发布第一篇吧～</div>';
+      if (items.length === 0) {
+        listEl.innerHTML = '<div class="empty-tip">暂无文章</div>';
         previewWrapper.classList.add('empty');
-        document.getElementById('previewMainImg').src = '';
-        renderPagination(totalPage);
+        renderPagination(total);
         return;
       }
 
-      // 有文章数据：显示右侧预览，默认展示第一篇
       previewWrapper.classList.remove('empty');
-      document.getElementById('previewMainImg').src = currentList[0].cover;
+      document.getElementById('previewMainImg').src = items[0].cover;
 
-      // 左侧双排网格渲染缩略图，鼠标悬浮切换预览
-      listEl.innerHTML = currentList.map((item, index) => {
-        const realId = start + index;
+      listEl.innerHTML = items.map((it, idx) => {
+        const id = start + idx;
         return `
-        <div class="blog-thumb-item" data-id="${realId}" onmouseover="switchPreview(${realId})" onclick="goDetail(${realId})">
-          <img src="${item.cover}" class="blog-thumb-img" alt="文章封面">
-          <div class="blog-thumb-title">${item.title}</div>
-        </div>
-        `;
+        <div class="blog-thumb-item" onmouseover="switchPreview(${id})" onclick="goDetail(${id})">
+          <img src="${it.cover}" class="blog-thumb-img">
+          <div class="blog-thumb-title">${it.title}</div>
+        </div>`;
       }).join('');
-      renderPagination(totalPage);
+      renderPagination(total);
     }
 
-    // 鼠标悬浮切换预览大图
     function switchPreview(id) {
-      if(articleList[id]) {
-        document.getElementById('previewMainImg').src = articleList[id].cover;
+      if (articleList[id]) document.getElementById('previewMainImg').src = articleList[id].cover;
+    }
+
+    function renderPagination(total) {
+      const el = document.getElementById('pagination');
+      if (total <= 1) { el.innerHTML = ''; return; }
+      let html = `<button class="page-btn" onclick="changePage(${currentPage - 1})" ${currentPage === 1 ? 'disabled' : ''}>上一页</button>`;
+      for (let i = 1; i <= total; i++) {
+        html += `<button class="page-btn ${currentPage === i ? 'active' : ''}" onclick="changePage(${i})">${i}</button>`;
       }
+      html += `<button class="page-btn" onclick="changePage(${currentPage + 1})" ${currentPage === total ? 'disabled' : ''}>下一页</button>`;
+      el.innerHTML = html;
     }
 
-    // 分页渲染
-    function renderPagination(totalPage) {
-      const pageEl = document.getElementById('pagination');
-      if (totalPage <= 1) {
-        pageEl.innerHTML = '';
-        return;
-      }
-      let pageHtml = `
-        <button class="page-btn" onclick="changePage(${currentPage - 1})" ${currentPage === 1 ? 'disabled' : ''}>上一页</button>
-      `;
-      for (let i = 1; i <= totalPage; i++) {
-        pageHtml += `
-          <button class="page-btn ${currentPage === i ? 'active' : ''}" onclick="changePage(${i})">${i}</button>
-        `;
-      }
-      pageHtml += `
-        <button class="page-btn" onclick="changePage(${currentPage + 1})" ${currentPage === totalPage ? 'disabled' : ''}>下一页</button>
-      `;
-      pageEl.innerHTML = pageHtml;
+    function changePage(p) {
+      if (p < 1 || p > Math.ceil(articleList.length / PAGE_SIZE)) return;
+      currentPage = p; renderPage();
     }
 
-    // 切换页码
-    function changePage(page) {
-      if (page < 1) return;
-      currentPage = page;
-      renderPage();
-    }
+    function goDetail(id) { location.href = `detail.html?id=${id}`; }
 
-    // 跳转详情页
-    function goDetail(id) {
-      location.href = `detail.html?id=${id}`;
-    }
-
-    // 编辑文章（自动展开发布面板，回填数据）
+    // ==============================================
+    // 文章保存 / 编辑
+    // ==============================================
     function editArticle(id) {
       editArticleId = id;
       const item = articleList[id];
       document.getElementById('articleTitle').value = item.title;
       document.getElementById('articleEditor').innerHTML = item.content;
-      // 封面图裁切状态回填
-      if(item.cover) fillCropState('cover', item.cover);
-      // 正文图裁切状态回填
-      if(item.contentImg) fillCropState('content', item.contentImg);
+
+      if (item.cover) {
+        const img = document.getElementById('coverCropImg');
+        img.src = item.cover; img.style.display = 'block';
+        resetCrop('cover'); bindDrag('cover'); bindWheel('cover');
+      }
+      if (item.contentImg) {
+        const img = document.getElementById('contentCropImg');
+        img.src = item.contentImg; img.style.display = 'block';
+        resetCrop('content'); bindDrag('content'); bindWheel('content');
+      }
+
       document.getElementById('formTitle').innerText = '编辑文章';
-      // 自动展开编辑面板
       const panel = document.getElementById('publishPanel');
       const icon = document.getElementById('foldIcon');
       panel.classList.remove('publish-fold');
@@ -837,63 +538,47 @@
       icon.classList.add('rotate');
     }
 
-    // 保存/发布文章
     function saveArticle() {
       const title = document.getElementById('articleTitle').value.trim();
       const content = document.getElementById('articleEditor').innerHTML;
       const coverSrc = document.getElementById('coverCropImg').src;
       const contentSrc = document.getElementById('contentCropImg').src;
 
-      if (!title || !content) {
-        alert('标题和内容都不能为空哦～');
-        return;
-      }
-      if (!coverSrc || coverSrc.includes('data:image/gif;base64')) {
-        alert('请上传并调整文章封面图～');
-        return;
-      }
+      if (!title || !content) { alert('标题和内容不能为空'); return; }
+      if (!coverSrc || coverSrc.includes('data:image/gif')) { alert('请上传封面图'); return; }
 
-      // 生成最终文章数据，保留裁切后的展示效果
-      const articleData = {
-        title: title,
-        content: content,
+      const data = {
+        title, content,
         cover: coverSrc,
         contentImg: contentSrc || ''
       };
 
       if (editArticleId !== null) {
-        articleList[editArticleId] = articleData;
-        localStorage.setItem('articleList', JSON.stringify(articleList));
-        alert('文章编辑成功！');
+        articleList[editArticleId] = data;
       } else {
-        articleList.unshift(articleData);
-        localStorage.setItem('articleList', JSON.stringify(articleList));
-        alert('文章发布成功！');
+        articleList.unshift(data);
       }
+
+      localStorage.setItem('articleList', JSON.stringify(articleList));
+      alert(editArticleId !== null ? '编辑成功' : '发布成功');
       resetForm();
       currentPage = 1;
       renderPage();
     }
 
-    // 重置表单并折叠面板
     function resetForm() {
       editArticleId = null;
-      // 重置表单内容
       document.getElementById('articleTitle').value = '';
       document.getElementById('articleEditor').innerHTML = '';
       document.getElementById('coverUpload').value = '';
       document.getElementById('contentUpload').value = '';
-      // 重置图片裁切状态
       document.getElementById('coverCropImg').style.display = 'none';
       document.getElementById('contentCropImg').style.display = 'none';
-      coverScale = contentScale = 1;
-      coverOffsetX = coverOffsetY = contentOffsetX = contentOffsetY = 0;
-      // 重置标题和面板状态
       document.getElementById('formTitle').innerText = '发布新文章';
       const panel = document.getElementById('publishPanel');
       const icon = document.getElementById('foldIcon');
-      panel.classList.remove('publish-unfold');
       panel.classList.add('publish-fold');
+      panel.classList.remove('publish-unfold');
       icon.classList.remove('rotate');
     }
   </script>
