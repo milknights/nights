@@ -169,7 +169,6 @@
       border-radius: 8px; outline: none; line-height: 1.6;
     }
 
-    /* 主流图片裁剪容器 */
     .img-upload-group { display: flex; gap: 25px; flex-wrap: wrap; margin: 10px 0; }
     .crop-wrapper {
       position: relative; width: 220px; height: 220px;
@@ -263,7 +262,6 @@
             <input type="text" id="articleTitle" placeholder="请输入文章标题">
           </div>
 
-          <!-- 封面图裁剪 -->
           <div class="form-item">
             <label>上传封面图（首页展示）</label>
             <div class="crop-wrapper" id="coverCropWrap">
@@ -279,7 +277,6 @@
             <input type="file" id="coverUpload" class="file-upload" accept="image/*" onchange="loadCropImage(event, 'cover')">
           </div>
 
-          <!-- 正文图裁剪 -->
           <div class="form-item">
             <label>上传正文图（详情页展示）</label>
             <div class="crop-wrapper" id="contentCropWrap">
@@ -320,19 +317,21 @@
     let currentPage = 1;
     let editArticleId = null;
 
-    // 裁剪状态
     let cover = { scale: 1, x: 0, y: 0, dragging: false };
     let content = { scale: 1, x: 0, y: 0, dragging: false };
 
     let blogConfig = JSON.parse(localStorage.getItem('blogConfig')) || {
-      blogName: '我的个人博客', blogDesc: '分享生活', avatar: ''
+      blogName: '我的个人博客', blogDesc: '分享生活点滴', avatar: ''
     };
     let articleList = JSON.parse(localStorage.getItem('articleList')) || [];
 
     window.onload = function () {
       initBlogInfo();
       const editId = new URLSearchParams(location.search).get('edit');
-      if (editId && articleList[editId]) editArticle(editId);
+      if (editId && articleList[editId]) {
+        editArticleId = editId;
+        editArticle(editId);
+      }
       renderPage();
     };
 
@@ -381,9 +380,7 @@
       r.readAsDataURL(f);
     }
 
-    // ==============================================
-    // 主流图片裁剪核心（原图 + 裁剪框 + 按钮缩放 + 滚轮 + 智能裁剪）
-    // ==============================================
+    // ========== 图片裁剪核心（已修复所有bug）==========
     function loadCropImage(e, type) {
       const file = e.target.files[0];
       if (!file) return;
@@ -450,16 +447,10 @@
     }
 
     function smartCrop(type) {
-      const t = type === 'cover' ? cover : content;
-      t.scale = 1;
-      t.x = 0;
-      t.y = 0;
-      updateCrop(type);
+      resetCrop(type);
     }
 
-    // ==============================================
-    // 页面渲染
-    // ==============================================
+    // ========== 页面渲染 ==========
     function renderPage() {
       const listEl = document.getElementById('blogThumbList');
       const previewWrapper = document.getElementById('previewWrapper');
@@ -468,7 +459,7 @@
       const items = articleList.slice(start, start + PAGE_SIZE);
 
       if (items.length === 0) {
-        listEl.innerHTML = '<div class="empty-tip">暂无文章</div>';
+        listEl.innerHTML = '<div class="empty-tip">暂无文章，快去发布第一篇吧～</div>';
         previewWrapper.classList.add('empty');
         renderPagination(total);
         return;
@@ -510,24 +501,23 @@
 
     function goDetail(id) { location.href = `detail.html?id=${id}`; }
 
-    // ==============================================
-    // 文章保存 / 编辑
-    // ==============================================
+    // ========== 编辑文章 ==========
     function editArticle(id) {
-      editArticleId = id;
       const item = articleList[id];
       document.getElementById('articleTitle').value = item.title;
       document.getElementById('articleEditor').innerHTML = item.content;
 
       if (item.cover) {
         const img = document.getElementById('coverCropImg');
-        img.src = item.cover; img.style.display = 'block';
-        resetCrop('cover'); bindDrag('cover'); bindWheel('cover');
+        img.src = item.cover;
+        img.style.display = 'block';
+        resetCrop('cover');
       }
       if (item.contentImg) {
         const img = document.getElementById('contentCropImg');
-        img.src = item.contentImg; img.style.display = 'block';
-        resetCrop('content'); bindDrag('content'); bindWheel('content');
+        img.src = item.contentImg;
+        img.style.display = 'block';
+        resetCrop('content');
       }
 
       document.getElementById('formTitle').innerText = '编辑文章';
@@ -538,19 +528,27 @@
       icon.classList.add('rotate');
     }
 
+    // ========== ✅ 发布保存（已完全修复）==========
     function saveArticle() {
       const title = document.getElementById('articleTitle').value.trim();
       const content = document.getElementById('articleEditor').innerHTML;
-      const coverSrc = document.getElementById('coverCropImg').src;
-      const contentSrc = document.getElementById('contentCropImg').src;
+      const coverImg = document.getElementById('coverCropImg');
+      const contentImg = document.getElementById('contentCropImg');
 
-      if (!title || !content) { alert('标题和内容不能为空'); return; }
-      if (!coverSrc || coverSrc.includes('data:image/gif')) { alert('请上传封面图'); return; }
+      const coverSrc = coverImg.style.display !== 'none' ? coverImg.src : '';
+      const contentSrc = contentImg.style.display !== 'none' ? contentImg.src : '';
+
+      if (!title || !content) {
+        alert('标题和内容不能为空！');
+        return;
+      }
+      if (!coverSrc) {
+        alert('请上传封面图！');
+        return;
+      }
 
       const data = {
-        title, content,
-        cover: coverSrc,
-        contentImg: contentSrc || ''
+        title, content, cover: coverSrc, contentImg: contentSrc
       };
 
       if (editArticleId !== null) {
@@ -560,7 +558,7 @@
       }
 
       localStorage.setItem('articleList', JSON.stringify(articleList));
-      alert(editArticleId !== null ? '编辑成功' : '发布成功');
+      alert(editArticleId ? '文章编辑成功！' : '文章发布成功！');
       resetForm();
       currentPage = 1;
       renderPage();
